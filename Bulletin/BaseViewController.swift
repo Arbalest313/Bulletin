@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import Material
 class BaseViewController: UIViewController {
     let disposeBag = DisposeBag()
 
@@ -30,6 +31,34 @@ class BaseViewController: UIViewController {
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+}
+
+extension BaseViewController {
+    func rightBarItemClick() {
+        
+    }
+    func creatBarItemRight(title: String) {
+        let btn = FlatButton()
+        btn.bl_title = title
+        btn.pulseAnimation = .centerRadialBeyondBounds
+        btn.titleLabel?.font = ThemeConstant.defaultFont(15)
+        btn.bl_titleColor = UIColor.white
+        btn.addTarget(self, action: #selector(rightBarItemClick), for: .touchUpInside)
+        btn.sizeToFit()
+        let right = UIBarButtonItem(customView: btn)
+        navigationItem.rightBarButtonItem = right
+    }
+    
+    func creatBarItemRight(image: String) {
+        let btn = FlatButton()
+        btn.image = UIImage(named: image)
+        btn.pulseAnimation = .centerWithBacking
+        btn.titleLabel?.font = ThemeConstant.defaultFont(13)
+        btn.bl_titleColor = UIColor.white
+        btn.addTarget(self, action: #selector(rightBarItemClick), for: .touchUpInside)
+        let right = UIBarButtonItem(customView: btn)
+        navigationItem.rightBarButtonItem = right
     }
 }
 

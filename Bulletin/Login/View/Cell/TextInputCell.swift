@@ -8,13 +8,18 @@
 
 import UIKit
 import SnapKit
-
+import Material
 class TextInputCell: UITableViewCell {
     
-    let textFld : UITextField = {
-        let fld = UITextField()
+    let textFld : TextField = {
+        let fld = TextField()
+        fld.placeholderVerticalOffset = 15
+        fld.contentMode = .bottom
+        fld.dividerActiveColor = ThemeConstant.defaultNavigationBarTintColor
+        fld.placeholderActiveColor = ThemeConstant.defaultNavigationBarTintColor
         return fld
     }()
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style:style,reuseIdentifier:reuseIdentifier)
         viewSetup()
@@ -33,10 +38,10 @@ extension TextInputCell {
             x.edges.equalToSuperview()
         }
         textFld.snp.makeConstraints { (x) in
-            x.top.equalToSuperview()
+            x.top.equalToSuperview().offset(12)
             x.bottom.equalToSuperview()
             x.left.equalToSuperview().offset(17)
-            x.right.equalToSuperview().offset(-15)
+            x.right.equalToSuperview()
             x.height.equalTo(44)
         }
         backgroundColor = UIColor.white
