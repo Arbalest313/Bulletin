@@ -16,10 +16,14 @@ class BaseViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.white
         view.backgroundColor = ThemeConstant.defaultgray
         navigationController?.navigationBar.isTranslucent = false
         automaticallyAdjustsScrollViewInsets = false
+        prepareView()
+        prepareBinding()
+        if (navigationController?.viewControllers.count) ?? 0 > 1 {
+            prepareLeftView()
+        }
         // Do any additional setup after loading the view, typically from a nib.
     }
 
@@ -35,10 +39,11 @@ class BaseViewController: UIViewController {
 }
 
 extension BaseViewController {
-    func rightBarItemClick() {
-        
+    func rightBarItemClick() {}
+    func leftBarItemClick() {
+        _ = navigationController?.popViewController(animated: true)
     }
-    func creatBarItemRight(title: String) {
+    func creatBarItemRight(title: String) -> UIButton {
         let btn = FlatButton()
         btn.bl_title = title
         btn.pulseAnimation = .centerRadialBeyondBounds
@@ -48,6 +53,7 @@ extension BaseViewController {
         btn.sizeToFit()
         let right = UIBarButtonItem(customView: btn)
         navigationItem.rightBarButtonItem = right
+        return btn
     }
     
     func creatBarItemRight(image: String) {
@@ -62,3 +68,20 @@ extension BaseViewController {
     }
 }
 
+extension BaseViewController {
+    func prepareView() {
+    
+    }
+    func prepareBinding (){
+    
+    }
+    fileprivate func prepareLeftView (){
+        let btn = IconButton()
+        btn.image = UIImage(named: "nav_back")
+        btn.pulseAnimation = .centerRadialBeyondBounds
+        btn.addTarget(self, action: #selector(leftBarItemClick), for: .touchUpInside)
+        btn.sizeToFit()
+        let right = UIBarButtonItem(customView: btn)
+        navigationItem.leftBarButtonItem = right
+    }
+}

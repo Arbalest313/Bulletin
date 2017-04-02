@@ -9,7 +9,7 @@
 import UIKit
 
 class ThemeConstant: NSObject {
-    static let defaultNavigationBarTintColor = UIColor(34, 44, 71)
+    static let defaultNavigationBarTintColor = UIColor(90, 98, 209)
     static let defaultFont = {(size: Float) in return UIFont(name:"Arial-BoldMT", size: CGFloat(size))!}
     static let defaultgray = UIColor(244, 244, 244)
 

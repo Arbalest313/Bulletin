@@ -44,6 +44,8 @@ extension TextInputCell {
             x.right.equalToSuperview()
             x.height.equalTo(44)
         }
+        selectionStyle = .none
         backgroundColor = UIColor.white
+        isUserInteractionEnabled = true
     }
 }
