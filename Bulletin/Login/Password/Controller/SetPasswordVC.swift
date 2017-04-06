@@ -24,13 +24,12 @@ extension SetPasswordVC {
         
     }
     override func prepareBinding() {
-        Observable.of(passwordCell.textFld.rx.text,confirmCell.textFld.rx.text).merge().map { (x) -> Bool in
+        Observable.of(passwordCell.textFld.rx.text,confirmCell.textFld.rx.text).merge().map {[unowned self] (x) -> Bool in
             if (self.passwordCell.textFld.text == self.confirmCell.textFld.text) {
                 return true
             }
             return false
-        }.distinctUntilChanged().subscribe(onNext:{enable in
-                LogDebug(enable)
+        }.distinctUntilChanged().subscribe(onNext:{[unowned self] enable in
                 DispatchQueue.main.async {
                     self.rightBtn?.alpha = enable ? 1 : 0.5
                     self.rightBtn?.isEnabled = enable

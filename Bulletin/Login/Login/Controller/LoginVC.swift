@@ -118,29 +118,34 @@ class LoginVC: BaseViewController {
 
 extension LoginVC {
     override func prepareBinding() {
-        Observable.of(passwordCell.textFld.rx.text,usernameCell.textFld.rx.text).merge().map { (x) -> Bool in
+        Observable.of(passwordCell.textFld.rx.text,usernameCell.textFld.rx.text).merge().map {[unowned self] (x) -> Bool in
             if ((self.passwordCell.textFld.text?.length)! > 6 && (self.usernameCell.textFld.text?.length)! > 6) {
                 return true
             }
             return false
-            }.distinctUntilChanged().subscribe(onNext:{enable in
+            }.distinctUntilChanged().subscribe(onNext:{[unowned self] enable in
                 LogDebug(enable)
                 self.loginBtn.alpha = enable ? 1 : 0.5
                 self.loginBtn.isEnabled = enable
             }).disposed(by: disposeBag)
         
-        termOfServiceBtn.rx.tap.subscribe { (x) in
+        termOfServiceBtn.rx.tap.subscribe {[unowned self] (x) in
             let vc = WebVC()
             vc.url = "http://www.hyyy.me"
             self.navigationController?.pushViewController(vc, animated: true)
             }.disposed(by: disposeBag)
         
-        forgotBtn.rx.tap.subscribe { (x) in
+        forgotBtn.rx.tap.subscribe {[unowned self] (x) in
             self.rightBarItemClick()
             }.disposed(by: disposeBag)
         
-        loginBtn.rx.tap.subscribe(onNext:{e in
-            
+        loginBtn.rx.tap.subscribe(onNext:{[unowned self] e in
+            APIProvider.request(.login(username: self.usernameCell.textFld.text!, password: self.passwordCell.textFld.text!))
+                .filterSuccessfulStatusCodes()
+                .showErrorHUD()
+                .subscribe(onNext: { (response) in
+                LogDebug(response.responseJSON)
+            })
         }).disposed(by: disposeBag)
     }
 

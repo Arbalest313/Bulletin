@@ -40,13 +40,12 @@ extension AccountVerifyVC {
         navigationController?.pushViewController(vc, animated: true)
     }
     override func prepareBinding() {
-        Observable.of(codeCell.textFld.rx.text,usernameCell.textFld.rx.text).merge().map { (x) -> Bool in
+        Observable.of(codeCell.textFld.rx.text,usernameCell.textFld.rx.text).merge().map {[unowned self] (x) -> Bool in
             if ((self.codeCell.textFld.text?.length)! > 4 && (self.usernameCell.textFld.text?.length)! > 6) {
                 return true
             }
             return false
-            }.distinctUntilChanged().subscribe(onNext:{enable in
-                LogDebug(enable)
+        }.distinctUntilChanged().subscribe(onNext:{[unowned self] enable in
                 DispatchQueue.main.async {
                     self.nextBtn?.alpha = enable ? 1 : 0.5
                     self.nextBtn?.isEnabled = enable
@@ -54,19 +53,36 @@ extension AccountVerifyVC {
                 }
             }).disposed(by: disposeBag)
         
+        
         usernameCell.textFld.rx.text.orEmpty.map { (x) -> Bool in
             if (x.length > 6) {
                 return true
             }
             return false
-            }.distinctUntilChanged().subscribe(onNext:{enable in
+            }.distinctUntilChanged().subscribe(onNext:{[unowned self] enable in
                 LogDebug(enable)
                 self.codeBtn.alpha = enable ? 1 : 0.5
                 self.codeBtn.isEnabled = enable
             }).disposed(by: disposeBag)
         
-        codeBtn.rx.tap.subscribe(onNext: { x in
-            LogDebug("code")
+
+        codeBtn.rx.tap.subscribe(onNext: {[unowned self] x in
+            self.codeBtn.isEnabled = false
+            self.codeBtn.alpha =  0.5
+        }).disposed(by: disposeBag)
+        
+        let count = 5
+        codeBtn.rx.tap.flatMap{ () -> Observable<Int> in
+            return Observable<Int>.timer(0, period:1, scheduler: MainScheduler.instance).take(count)
+        }.map { (x) -> Int in
+            return count - x
+        }.subscribe(onNext: {[unowned self] x in
+            self.codeBtn.bl_title = "\(x)"
+            if x == 1 {
+                self.codeBtn.isEnabled = true
+                self.codeBtn.alpha =  1
+                self.codeBtn.bl_title = "Verify"
+            }
         }).disposed(by: disposeBag)
     }
 

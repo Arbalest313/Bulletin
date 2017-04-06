@@ -24,19 +24,19 @@ class TextInputCell: UITableViewCell {
         super.init(style:style,reuseIdentifier:reuseIdentifier)
         viewSetup()
     }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         viewSetup()
+    }
+    override func setSelected(_ selected: Bool, animated: Bool) {
     }
     
 }
 
 extension TextInputCell {
     func viewSetup() {
-        contentView.addSubview(textFld)
-        contentView.snp.makeConstraints { (x) in
-            x.edges.equalToSuperview()
-        }
+        addSubview(textFld)
         textFld.snp.makeConstraints { (x) in
             x.top.equalToSuperview().offset(12)
             x.bottom.equalToSuperview()
@@ -44,8 +44,8 @@ extension TextInputCell {
             x.right.equalToSuperview()
             x.height.equalTo(44)
         }
-        selectionStyle = .none
         backgroundColor = UIColor.white
-        isUserInteractionEnabled = true
+        //isUserInteractionEnabled = true
+        //textFld.isUserInteractionEnabled = true
     }
 }
