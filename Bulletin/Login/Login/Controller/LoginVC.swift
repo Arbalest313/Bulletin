@@ -12,7 +12,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import Material
-
+import MBProgressHUD
 
 
 class LoginVC: BaseViewController {
@@ -119,7 +119,7 @@ class LoginVC: BaseViewController {
 extension LoginVC {
     override func prepareBinding() {
         Observable.of(passwordCell.textFld.rx.text,usernameCell.textFld.rx.text).merge().map {[unowned self] (x) -> Bool in
-            if ((self.passwordCell.textFld.text?.length)! > 6 && (self.usernameCell.textFld.text?.length)! > 6) {
+            if ((self.passwordCell.textFld.text?.length)! > 3 && (self.usernameCell.textFld.text?.length)! > 3) {
                 return true
             }
             return false
@@ -140,11 +140,13 @@ extension LoginVC {
             }.disposed(by: disposeBag)
         
         loginBtn.rx.tap.subscribe(onNext:{[unowned self] e in
-            APIProvider.request(.login(username: self.usernameCell.textFld.text!, password: self.passwordCell.textFld.text!))
+//            M
+            _ = APIProvider.request(.login(username: self.usernameCell.textFld.text!, password: self.passwordCell.textFld.text!))
                 .filterSuccessfulStatusCodes()
                 .showErrorHUD()
                 .subscribe(onNext: { (response) in
                 LogDebug(response.responseJSON)
+                    UserM.shared.token = response.dataJSON["access_token"].stringValue
             })
         }).disposed(by: disposeBag)
     }

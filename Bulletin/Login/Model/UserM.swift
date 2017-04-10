@@ -17,6 +17,7 @@ class UserM: NSObject {
     var gender: String = ""
     var rate: String = ""
     var birthday: String = ""
-    
     var token = ""
+    
+    static var shared = UserM()
 }

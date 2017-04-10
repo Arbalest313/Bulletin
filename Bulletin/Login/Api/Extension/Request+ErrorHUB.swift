@@ -9,15 +9,18 @@
 import UIKit
 import RxSwift
 import Moya
+import MBProgressHUD
 extension Observable where Element : Moya.Response {
     func showErrorHUD() -> Observable<Element> {
         return self.do(onNext: {(response) in
             if (!(200...210 ~= response.statusCode)) {
-                LogError(response.message)
+                
+                LogError(response.statusCode)
             }
         }, onError: {(e) in
             guard let error = e as? MoyaError else { throw e }
-            LogError(error.response?.message ?? error)
+//            LogError(error.response?.message ?? error)
+            LogError(error.response?.statusCode)
         })
     }
 }

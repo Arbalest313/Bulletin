@@ -69,6 +69,13 @@ extension AccountVerifyVC {
         codeBtn.rx.tap.subscribe(onNext: {[unowned self] x in
             self.codeBtn.isEnabled = false
             self.codeBtn.alpha =  0.5
+            _ = APIProvider.request(.requestCode(username:self.usernameCell.textFld.text!))
+                .filterSuccessfulStatusCodes()
+                .showErrorHUD()
+                .subscribe(onNext: { (response) in
+                    LogDebug(response.responseJSON)
+                })
+
         }).disposed(by: disposeBag)
         
         let count = 5

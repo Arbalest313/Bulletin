@@ -21,7 +21,13 @@ class SetPasswordVC: BaseViewController {
 
 extension SetPasswordVC {
     override func rightBarItemClick() {
-        
+        _ = APIProvider.request(.changePassword(password: passwordCell.textFld.text!))
+            .filterSuccessfulStatusCodes()
+            .showErrorHUD()
+            .subscribe(onNext: { (response) in
+                LogDebug(response.responseJSON)
+            })
+
     }
     override func prepareBinding() {
         Observable.of(passwordCell.textFld.rx.text,confirmCell.textFld.rx.text).merge().map {[unowned self] (x) -> Bool in

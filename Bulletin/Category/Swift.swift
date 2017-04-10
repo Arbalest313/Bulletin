@@ -78,6 +78,19 @@ extension String {
         
         return hexString
     }
+    
+    func fromBase64() -> String? {
+        guard let data = Data(base64Encoded: self) else {
+            return nil
+        }
+        
+        return String(data: data, encoding: .utf8)
+    }
+    
+    func toBase64() -> String {
+        return Data(self.utf8).base64EncodedString()
+    }
+
 }
 
 extension Array where Element : Equatable {
@@ -269,6 +282,12 @@ func screenFitted(x: CGFloat) -> CGFloat {
     return x * screenBounds.width / 375 //iphone6 width
 }
 
+
+///Mark: - 
+
+//func showToast(title:String, completion: ((Void) -> Void) = nil) {
+//    let alter = UIa
+//}
 
 //Mark: -
 func LogDebug(_ info: Any?) {

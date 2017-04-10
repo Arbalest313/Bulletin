@@ -17,6 +17,7 @@ class TextInputCell: UITableViewCell {
         fld.contentMode = .bottom
         fld.dividerActiveColor = ThemeConstant.defaultNavigationBarTintColor
         fld.placeholderActiveColor = ThemeConstant.defaultNavigationBarTintColor
+        fld.autocapitalizationType = .none
         return fld
     }()
     

@@ -16,7 +16,14 @@ struct AuthPlugin: PluginType {
             return request
         }
         var request = request
-        request.addValue("Bearer " + token, forHTTPHeaderField: "Authorization")
+        if let t = target as? LoginAPI, t.path == LoginAPI.login(username: "",password: "").path {
+            let client = "Gwy5Zzgml6C2OBdp1E74X4GRajxrAHIqZ0lGNUvz"
+            let sercet = "iAcj0S77EzeKBpCGFKs7QZdrT1v6zU3N03oHrRm8bUqFfwebv5bnM08cTqyfT5qJ2XcM61qi2D9nE8dhO1A28KO6tooXLTGej89ZZ7gXjBEJ3IXCeV4DK4I6jnpAEYz8"
+            let base64 = "\(client):\(sercet)".toBase64()
+            request.addValue("Basic \(base64)", forHTTPHeaderField:"Authorization")
+        } else {
+            request.addValue("Bearer " + token, forHTTPHeaderField: "Authorization")
+        }
         return request
     }
 }

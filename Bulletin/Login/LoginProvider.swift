@@ -9,12 +9,13 @@
 import UIKit
 import Moya
 
-let APIProvider = RxMoyaProvider<LoginAPI>(plugins:[NetworkLoggerPlugin(),AuthPlugin(tokenClosure:{"321"})])
+let APIProvider = RxMoyaProvider<LoginAPI>(plugins:[NetworkLoggerPlugin(),AuthPlugin(tokenClosure:{UserM.shared.token})])
 
 enum LoginAPI {
     case login(username:String, password:String)
     case verifyAccount(username:String, code:String)
     case changePassword(password:String)
+    case requestCode(username:String)
 }
 
 // MARK: - TargetType Protocol Implementation
@@ -22,18 +23,20 @@ extension LoginAPI: TargetType{
 
     /// The target's base `URL`.
     var baseURL: URL {
-        return URL(string: "http://efoodvan.kerokuapp.com")!
+        return URL(string: "http://efoodvan.herokuapp.com")!
     }
     
     /// The path to be appended to `baseURL` to form the full `URL`.
     var path: String {
         switch self {
         case .login:
-            return "/user-api/login"
+            return "/o/token/"
         case .verifyAccount:
-            return "/user-api/verifyAccount"
+            return "/user-api/verifyAccount/"
         case .changePassword:
-            return "/user-api/changePass"
+            return "/user-api/changePass/"
+        case .requestCode:
+            return "/user-api/register/"
         default:
             return ""
         }
@@ -42,7 +45,7 @@ extension LoginAPI: TargetType{
     /// The HTTP method used in the request.
     var method: Moya.Method {
         switch self {
-        case .login, .verifyAccount, .changePassword:
+        case .login, .verifyAccount, .changePassword, .requestCode:
             return .post
         default:
             return .get
@@ -56,18 +59,22 @@ extension LoginAPI: TargetType{
         case .login(let username, let password):
             param["username"] = username
             param["password"] = password
+            param["grant_type"] = "password"
         case .verifyAccount(let username, let code):
             param["username"] = username
             param["code"] = code
         case .changePassword(let password):
-            param["password"] = password
+            param["password"] = password.md5()
+        case .requestCode(let username):
+            param["username"] = username
+            param["password"] = username.md5()
         }
         return param
     }
     
     /// The method used for parameter encoding.
     var parameterEncoding: ParameterEncoding {
-        return JSONEncoding.default
+        return URLEncoding.default
     }
 
     
