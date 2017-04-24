@@ -19,5 +19,11 @@ class UserM: NSObject {
     var birthday: String = ""
     var token = ""
     
-    static var shared = UserM()
+}
+
+
+extension UserM {
+    func isLogined() -> Bool {
+        return token.length > 0
+    }
 }

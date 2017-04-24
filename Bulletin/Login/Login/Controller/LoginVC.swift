@@ -74,6 +74,10 @@ class LoginVC: BaseViewController {
         
     }
     
+    override func leftBarItemClick() {
+         dismiss(animated: true, completion: nil)
+    }
+    
     func viewSetup() {
         view.addSubview(passwordCell)
         view.addSubview(usernameCell)
@@ -82,6 +86,7 @@ class LoginVC: BaseViewController {
         view.addSubview(forgotBtn)
         
         _ = creatBarItemRight(title: "Regist")
+        prepareLeftView()
         
         passwordCell.textFld.placeholder = "Password"
         passwordCell.textFld.isVisibilityIconButtonEnabled = true
@@ -129,24 +134,26 @@ extension LoginVC {
                 self.loginBtn.isEnabled = enable
             }).disposed(by: disposeBag)
         
-        termOfServiceBtn.rx.tap.subscribe {[unowned self] (x) in
+        termOfServiceBtn.rx.tap.subscribe (onNext:{[unowned self] (x) in
             let vc = WebVC()
             vc.url = "http://www.hyyy.me"
             self.navigationController?.pushViewController(vc, animated: true)
-            }.disposed(by: disposeBag)
+        }).disposed(by: disposeBag)
         
-        forgotBtn.rx.tap.subscribe {[unowned self] (x) in
-            self.rightBarItemClick()
-            }.disposed(by: disposeBag)
+        forgotBtn.rx.tap.subscribe (onNext:{[unowned self] (x) in
+            let vc = AccountVerifyVC()
+            vc.title = "Verify Account"
+            self.navigationController?.pushViewController(vc, animated: true)
+        }).disposed(by: disposeBag)
         
         loginBtn.rx.tap.subscribe(onNext:{[unowned self] e in
-//            M
             _ = APIProvider.request(.login(username: self.usernameCell.textFld.text!, password: self.passwordCell.textFld.text!))
                 .filterSuccessfulStatusCodes()
-                .showErrorHUD()
+                .showHUD(on: self.view)
                 .subscribe(onNext: { (response) in
                 LogDebug(response.responseJSON)
-                    UserM.shared.token = response.dataJSON["access_token"].stringValue
+                    LoginContext.shared.token = response.responseJSON["access_token"].stringValue
+                    self.navigationController?.dismiss(animated: true, completion: nil)
             })
         }).disposed(by: disposeBag)
     }

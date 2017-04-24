@@ -11,6 +11,44 @@ import SnapKit
 import RxSwift
 import RxCocoa
 import Material
+import Then
+
+
+struct RowData  {
+    var reuseIdentifier : String = ""
+    var data : Any?
+}
+
+protocol BaseTableCell: class {
+    func handle(rowData: RowData)
+    var disposeBag: DisposeBag {get set}
+}
+
+var AssociatedCellBag: UInt8 = 0
+
+extension BaseTableCell where Self : UITableViewCell {
+    func prepareForReueseObserver() -> Observable<[Any]> {
+        return rx.sentMessage(#selector(UITableViewCell.prepareForReuse)).take(1)
+    }
+    func handle(rowData: RowData) {
+        
+    }
+    var disposeBag: DisposeBag {
+        get {
+            if let bag = objc_getAssociatedObject(self, &AssociatedCellBag) as? DisposeBag {
+                return bag
+            }
+            let bag = DisposeBag()
+            objc_setAssociatedObject(self, &AssociatedCellBag, bag, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            return bag
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedCellBag, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+    
+}
+
 class BaseViewController: UIViewController {
     let disposeBag = DisposeBag()
 
@@ -66,6 +104,19 @@ extension BaseViewController {
         let right = UIBarButtonItem(customView: btn)
         navigationItem.rightBarButtonItem = right
     }
+    
+    func creatBarItemLeft(title: String) -> UIButton {
+        let btn = FlatButton()
+        btn.bl_title = title
+        btn.pulseAnimation = .centerRadialBeyondBounds
+        btn.titleLabel?.font = ThemeConstant.defaultFont(15)
+        btn.bl_titleColor = UIColor.white
+        btn.addTarget(self, action: #selector(leftBarItemClick), for: .touchUpInside)
+        btn.sizeToFit()
+        let left = UIBarButtonItem(customView: btn)
+        navigationItem.leftBarButtonItem = left
+        return btn
+    }
 }
 
 extension BaseViewController {
@@ -75,9 +126,9 @@ extension BaseViewController {
     func prepareBinding (){
     
     }
-    fileprivate func prepareLeftView (){
+    func prepareLeftView (image:String = "nav_back"){
         let btn = IconButton()
-        btn.image = UIImage(named: "nav_back")
+        btn.image = UIImage(named: image)
         btn.pulseAnimation = .centerRadialBeyondBounds
         btn.addTarget(self, action: #selector(leftBarItemClick), for: .touchUpInside)
         btn.sizeToFit()

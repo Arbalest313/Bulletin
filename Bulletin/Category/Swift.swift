@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+
 // MARK: - 标准库 扩展
 extension Bool {
     /// 通过String创建， 只有 "1" 和 "true" 会返回 true

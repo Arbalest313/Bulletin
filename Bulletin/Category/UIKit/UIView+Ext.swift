@@ -40,3 +40,12 @@ extension UIButton {
     }
 
 }
+
+extension UIApplication {
+    class func bl_currentViewController() -> UIViewController {
+        if let vc = UIApplication.shared.keyWindow?.currentViewController() {
+            return vc
+        }
+        return UIViewController()
+    }
+}

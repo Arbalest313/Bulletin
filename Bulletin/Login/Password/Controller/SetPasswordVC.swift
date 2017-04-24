@@ -25,13 +25,13 @@ extension SetPasswordVC {
             .filterSuccessfulStatusCodes()
             .showErrorHUD()
             .subscribe(onNext: { (response) in
-                LogDebug(response.responseJSON)
+                self.dismiss(animated: true, completion: nil)
             })
 
     }
     override func prepareBinding() {
-        Observable.of(passwordCell.textFld.rx.text,confirmCell.textFld.rx.text).merge().map {[unowned self] (x) -> Bool in
-            if (self.passwordCell.textFld.text == self.confirmCell.textFld.text) {
+        Observable.of(passwordCell.textFld.rx.text, confirmCell.textFld.rx.text).merge().map {[unowned self] (x) -> Bool in
+            if ((self.passwordCell.textFld.text?.length)! > 3 && self.passwordCell.textFld.text == self.confirmCell.textFld.text) {
                 return true
             }
             return false
@@ -42,6 +42,19 @@ extension SetPasswordVC {
                     self.rightBtn?.setNeedsDisplay()
                 }
             }).disposed(by: disposeBag)
+        
+        
+        confirmCell.textFld.rx.text.map {[unowned self] (x) -> Bool in
+            if ((self.passwordCell.textFld.text?.length)! > 3 && (self.confirmCell.textFld.text?.length)! > 3
+                && self.passwordCell.textFld.text != self.confirmCell.textFld.text) {
+                return true
+            }
+            return false
+        }.distinctUntilChanged().subscribe(onNext:{[unowned self] enable in
+            self.confirmCell.textFld.placeholderActiveColor = enable ? Color.red.lighten1 :  ThemeConstant.defaultNavigationBarTintColor
+            self.confirmCell.textFld.placeholder = enable ? "Not Matching" : "Confirm Password"
+            }).disposed(by: disposeBag)
+
     }
     
     override func prepareView() {

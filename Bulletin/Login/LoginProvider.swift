@@ -9,7 +9,7 @@
 import UIKit
 import Moya
 
-let APIProvider = RxMoyaProvider<LoginAPI>(plugins:[NetworkLoggerPlugin(),AuthPlugin(tokenClosure:{UserM.shared.token})])
+let APIProvider = RxMoyaProvider<LoginAPI>(plugins:[NetworkLoggerPlugin(),AuthPlugin(tokenClosure:{LoginContext.shared.token})])
 
 enum LoginAPI {
     case login(username:String, password:String)
@@ -36,7 +36,7 @@ extension LoginAPI: TargetType{
         case .changePassword:
             return "/user-api/changePass/"
         case .requestCode:
-            return "/user-api/register/"
+            return "/user-api/requestCode/"
         default:
             return ""
         }
@@ -45,10 +45,10 @@ extension LoginAPI: TargetType{
     /// The HTTP method used in the request.
     var method: Moya.Method {
         switch self {
-        case .login, .verifyAccount, .changePassword, .requestCode:
+        case .login, .verifyAccount, .requestCode:
             return .post
-        default:
-            return .get
+        case .changePassword:
+            return .put
         }
     }
     
@@ -58,7 +58,12 @@ extension LoginAPI: TargetType{
         switch self {
         case .login(let username, let password):
             param["username"] = username
-            param["password"] = password
+            if password == "test"
+            {
+                param["password"] = password
+            } else {
+                param["password"] = password.md5()
+            }
             param["grant_type"] = "password"
         case .verifyAccount(let username, let code):
             param["username"] = username

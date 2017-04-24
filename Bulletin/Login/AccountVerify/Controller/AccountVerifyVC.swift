@@ -35,23 +35,30 @@ class AccountVerifyVC: BaseViewController {
 
 extension AccountVerifyVC {
     override func rightBarItemClick() {
-        let vc = SetPasswordVC()
-        vc.title = usernameCell.textFld.text!
-        navigationController?.pushViewController(vc, animated: true)
+        _ = APIProvider.request(.verifyAccount(username: usernameCell.textFld.text!, code: codeCell.textFld.text!))
+            .filterSuccessfulStatusCodes()
+            .showErrorHUD()
+            .subscribe(onNext: { (response) in
+                LoginContext.shared.token = response.dataJSON["access_token"].stringValue
+                let vc = SetPasswordVC()
+                vc.title = self.usernameCell.textFld.text!
+                self.navigationController?.pushViewController(vc, animated: true)
+            })
     }
     override func prepareBinding() {
         Observable.of(codeCell.textFld.rx.text,usernameCell.textFld.rx.text).merge().map {[unowned self] (x) -> Bool in
-            if ((self.codeCell.textFld.text?.length)! > 4 && (self.usernameCell.textFld.text?.length)! > 6) {
+            if ((self.codeCell.textFld.text?.length)! > 3 && (self.usernameCell.textFld.text?.length)! > 4) {
                 return true
             }
             return false
         }.distinctUntilChanged().subscribe(onNext:{[unowned self] enable in
+            
                 DispatchQueue.main.async {
                     self.nextBtn?.alpha = enable ? 1 : 0.5
                     self.nextBtn?.isEnabled = enable
                     self.nextBtn?.setNeedsDisplay()
                 }
-            }).disposed(by: disposeBag)
+        }).disposed(by: disposeBag)
         
         
         usernameCell.textFld.rx.text.orEmpty.map { (x) -> Bool in

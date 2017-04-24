@@ -12,7 +12,9 @@ class HomeVC: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+//        LoginContext.checkLogin {
+//            self.navigationController?.title = "Posting"
+//        }
         // Do any additional setup after loading the view.
     }
 
@@ -20,16 +22,15 @@ class HomeVC: BaseViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+}
 
-    /*
-    // MARK: - Navigation
+extension HomeVC {
+    override func prepareView() {
+         title = "Bulletin"
+         _ = creatBarItemRight(title: "Submit")
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
-    */
-
+    override func rightBarItemClick() {
+        self.present(BaseNavigationController(rootViewController: CreatePostVC()), animated: true, completion: nil)
+    }
 }
