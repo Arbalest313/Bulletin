@@ -16,7 +16,7 @@ class CreatePostFillTipInfoVC: BaseViewController {
         this.estimatedRowHeight = 400
         this.rowHeight = UITableViewAutomaticDimension
         this.separatorStyle = .none
-        this.register(CreatePostTitleCell.self, forCellReuseIdentifier: "CreatePostTitleCell")
+        this.register(CreatePostTipTypeCell.self, forCellReuseIdentifier: "CreatePostTipTypeCell")
         this.register(CreatePostDescriptionsCell.self, forCellReuseIdentifier: "CreatePostDescriptionsCell")
     }
     
@@ -47,7 +47,7 @@ extension CreatePostFillTipInfoVC {
     }
     
     override func prepareBinding() {
-        let titleRow = RowData(reuseIdentifier: "CreatePostTitleCell", data: viewModel)
+        let titleRow = RowData(reuseIdentifier: "CreatePostTipTypeCell", data: viewModel)
         let descriptionRow = RowData(reuseIdentifier: "CreatePostDescriptionsCell", data: viewModel)
         let rows = [titleRow, descriptionRow,]
         

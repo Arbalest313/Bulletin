@@ -101,7 +101,7 @@ extension AppDelegate {
     
     func setupIQKeyboard() {
         IQKeyboardManager.sharedManager().enable = true
-        IQKeyboardManager.sharedManager().enableAutoToolbar = false
+        IQKeyboardManager.sharedManager().enableAutoToolbar = true
         IQKeyboardManager.sharedManager().shouldResignOnTouchOutside = true
     }
     
