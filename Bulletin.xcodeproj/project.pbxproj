@@ -12,6 +12,7 @@
 		1C4E5FA51E9F17BA009017AC /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4E5FA41E9F17BA009017AC /* HomeVC.swift */; };
 		1C4E5FA81E9F2A87009017AC /* AppContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C4E5FA71E9F2A87009017AC /* AppContext.swift */; };
 		1C5D8ED01E8F958700E45F32 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5D8ECF1E8F958700E45F32 /* UIView+Ext.swift */; };
+		1C9559B11EBA1ACC00F04D52 /* CreatePostTipInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C9559B01EBA1ACC00F04D52 /* CreatePostTipInfoCell.swift */; };
 		1CA2CD6E1E909D9400F4BA60 /* AccountVerifyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA2CD6D1E909D9400F4BA60 /* AccountVerifyVC.swift */; };
 		1CA2CD721E914B6100F4BA60 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1CA2CD711E914B6100F4BA60 /* Assets.xcassets */; };
 		1CA2CD741E9150B500F4BA60 /* TextInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA2CD731E9150B500F4BA60 /* TextInputCell.swift */; };
@@ -51,6 +52,7 @@
 		1C4E5FA41E9F17BA009017AC /* HomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HomeVC.swift; path = Posting/Home/Controller/HomeVC.swift; sourceTree = "<group>"; };
 		1C4E5FA71E9F2A87009017AC /* AppContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppContext.swift; path = AppContext/AppContext.swift; sourceTree = "<group>"; };
 		1C5D8ECF1E8F958700E45F32 /* UIView+Ext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Ext.swift"; path = "Category/UIKit/UIView+Ext.swift"; sourceTree = "<group>"; };
+		1C9559B01EBA1ACC00F04D52 /* CreatePostTipInfoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CreatePostTipInfoCell.swift; path = Posting/CreatPost/View/Cell/CreatePostTipInfoCell.swift; sourceTree = "<group>"; };
 		1CA2CD6D1E909D9400F4BA60 /* AccountVerifyVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AccountVerifyVC.swift; path = Login/AccountVerify/Controller/AccountVerifyVC.swift; sourceTree = "<group>"; };
 		1CA2CD711E914B6100F4BA60 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Bulletin/Assets.xcassets; sourceTree = "<group>"; };
 		1CA2CD731E9150B500F4BA60 /* TextInputCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TextInputCell.swift; path = Login/Login/View/Cell/TextInputCell.swift; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 				1CEE30171EA9B70E00AC8260 /* CreatePostTitleCell.swift */,
 				1CEE30191EAA005A00AC8260 /* CreatePostDescriptionsCell.swift */,
 				1CEE301D1EAA220000AC8260 /* CreatePostTipTypeCell.swift */,
+				1C9559B01EBA1ACC00F04D52 /* CreatePostTipInfoCell.swift */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -528,6 +531,7 @@
 				1CB874831E8CE227007B426F /* BaseViewController.swift in Sources */,
 				1C4E5FA51E9F17BA009017AC /* HomeVC.swift in Sources */,
 				1CA2CD921E96453400F4BA60 /* UserM.swift in Sources */,
+				1C9559B11EBA1ACC00F04D52 /* CreatePostTipInfoCell.swift in Sources */,
 				1CB874A71E8E0414007B426F /* UIColor+Ext.swift in Sources */,
 				1CA2CD8F1E963D2700F4BA60 /* LoginUserDefualt.swift in Sources */,
 				1CB8749C1E8DFD50007B426F /* BaseNavigationController.swift in Sources */,

@@ -16,6 +16,7 @@ enum LoginAPI {
     case verifyAccount(username:String, code:String)
     case changePassword(password:String)
     case requestCode(username:String)
+    case submitPost(title:String, descriptions:String, type:String, extraInfo:String)
 }
 
 // MARK: - TargetType Protocol Implementation
@@ -37,6 +38,8 @@ extension LoginAPI: TargetType{
             return "/user-api/changePass/"
         case .requestCode:
             return "/user-api/requestCode/"
+        case .submitPost:
+            return "create-post"
         default:
             return ""
         }
@@ -45,10 +48,12 @@ extension LoginAPI: TargetType{
     /// The HTTP method used in the request.
     var method: Moya.Method {
         switch self {
-        case .login, .verifyAccount, .requestCode:
+        case .login, .verifyAccount, .requestCode, .submitPost:
             return .post
         case .changePassword:
             return .put
+        default:
+            return .get
         }
     }
     
@@ -73,6 +78,11 @@ extension LoginAPI: TargetType{
         case .requestCode(let username):
             param["username"] = username
             param["password"] = username.md5()
+        case .submitPost(let title, let descriptions, let type, let extraInfo):
+            param["title"] = title
+            param["descriptions"] = descriptions
+            param["type"] = type
+            param["extraInfo"] = extraInfo
         }
         return param
     }

@@ -14,8 +14,9 @@ class CreatePostTitleCell: TextInputCell, BaseTableCell {
         guard let data = rowData.data as? CreatePostVM else {
             fatalError("rowData.data as CreatePostVM failed")
         }
-        _ = data.title.asObservable().takeUntil(prepareForReueseObserver()).bindTo(textFld.rx.text)
-//        disposed(by: disposeBag)
+        _ = textFld.rx.text.orEmpty.takeUntil(prepareForReueseObserver()).subscribe(onNext: { (x) in
+            data.title.value = x
+        })
     }
     
     override func viewSetup() {

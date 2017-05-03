@@ -7,7 +7,16 @@
 //
 
 import UIKit
-
+import RxSwift
 class BaseModel: NSObject {
+    let disposeBag = DisposeBag()
 
+    required override init() {
+        super.init()
+        prepareInit()
+    }
+    
+    func prepareInit() {
+    }
+    
 }

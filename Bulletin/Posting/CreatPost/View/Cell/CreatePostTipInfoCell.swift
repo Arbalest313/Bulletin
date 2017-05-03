@@ -1,8 +1,8 @@
 //
-//  CreatePostDescriptionsCell.swift
+//  CreatePostTipInfoCell.swift
 //  Bulletin
 //
-//  Created by huangyuan on 21/04/2017.
+//  Created by huangyuan on 03/05/2017.
 //  Copyright © 2017 hYDev. All rights reserved.
 //
 
@@ -10,13 +10,10 @@ import UIKit
 import Material
 import RxSwift
 import RxCocoa
-class CreatePostDescriptionsCell: UITableViewCell, BaseTableCell {
+
+class CreatePostTipInfoCell: UITableViewCell, BaseTableCell {
     let textV : TextView = {
         let fld = TextView()
-//        fld.placeholderVerticalOffset = 15
-//        fld.contentMode = .bottom
-//        fld.dividerActiveColor = ThemeConstant.defaultNavigationBarTintColor
-//        fld.placeholderActiveColor = ThemeConstant.defaultNavigationBarTintColor
         fld.autocapitalizationType = .none
         return fld
     }()
@@ -32,14 +29,14 @@ class CreatePostDescriptionsCell: UITableViewCell, BaseTableCell {
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
     }
-
+    
     func handle(rowData: RowData) {
         guard let data = rowData.data as? CreatePostVM else {
             fatalError("rowData.data as CreatePostVM failed")
         }
         textV.placeholder = "Your descriptions"
         _ = textV.rx.text.orEmpty.takeUntil(prepareForReueseObserver()).subscribe(onNext: { (x) in
-            data.descriptions.value = x
+            data.extraInfo.value = x
         })
     }
     
@@ -53,6 +50,7 @@ class CreatePostDescriptionsCell: UITableViewCell, BaseTableCell {
             x.height.equalTo(44 * 3)
         }
         backgroundColor = UIColor.white
-        
     }
+    
 }
+

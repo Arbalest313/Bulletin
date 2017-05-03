@@ -17,7 +17,7 @@ class CreatePostFillTipInfoVC: BaseViewController {
         this.rowHeight = UITableViewAutomaticDimension
         this.separatorStyle = .none
         this.register(CreatePostTipTypeCell.self, forCellReuseIdentifier: "CreatePostTipTypeCell")
-        this.register(CreatePostDescriptionsCell.self, forCellReuseIdentifier: "CreatePostDescriptionsCell")
+        this.register(CreatePostTipInfoCell.self, forCellReuseIdentifier: "CreatePostTipInfoCell")
     }
     
     let dataSource = RxTableViewSectionedReloadDataSource<SectionModel<String, RowData>>()
@@ -48,7 +48,7 @@ extension CreatePostFillTipInfoVC {
     
     override func prepareBinding() {
         let titleRow = RowData(reuseIdentifier: "CreatePostTipTypeCell", data: viewModel)
-        let descriptionRow = RowData(reuseIdentifier: "CreatePostDescriptionsCell", data: viewModel)
+        let descriptionRow = RowData(reuseIdentifier: "CreatePostTipInfoCell", data: viewModel)
         let rows = [titleRow, descriptionRow,]
         
         Observable.just([SectionModel(model:"", items:rows)])
@@ -61,5 +61,24 @@ extension CreatePostFillTipInfoVC {
             }
             return cell
         }
+        
+        viewModel.submitBtnEnable.asObservable().do(onNext: {[unowned self] enable in
+            self.rightBarItemBtn.alpha = enable ? 1 : 0.5
+        }).bindTo(rightBarItemBtn.rx.isEnabled).disposed(by: disposeBag)
+        
+        
+        rightBarItemBtn.rx.tap.subscribe(onNext: {[unowned self] x in
+            let viewModel = self.viewModel
+            _ = APIProvider.request(.submitPost(title: viewModel.title.value,
+                                                descriptions: viewModel.descriptions.value,
+                                                type: viewModel.postType.value,
+                                                extraInfo: viewModel.extraInfo.value))
+                .filterSuccessfulStatusCodes()
+                .showErrorHUD()
+                .subscribe(onNext: { (response) in
+                    LogDebug(response.responseJSON)
+                })
+        }).disposed(by: disposeBag)
+        
     }
 }

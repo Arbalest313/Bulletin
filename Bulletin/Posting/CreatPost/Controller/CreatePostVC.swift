@@ -14,7 +14,24 @@ class CreatePostVM : BaseModel {
     var title : Variable<String> = Variable("")
     var descriptions: Variable<String> = Variable("")
     var postType: Variable<String> = Variable("0")
-    var extraInfo: String = ""
+    var extraInfo: Variable<String> = Variable("")
+    
+    var nextBtnEnable : Variable<Bool> = Variable(false)
+    var submitBtnEnable : Variable<Bool> = Variable(false)
+    override func prepareInit() {
+        Observable.combineLatest([title.asObservable(), descriptions.asObservable()]).map { (values) -> Bool in
+            return values[0].length > 4 && values[1].length > 4
+        }.distinctUntilChanged().subscribe(onNext: {[unowned self] (enable) in
+            self.nextBtnEnable.value = enable
+        }).disposed(by: disposeBag)
+        
+        Observable.combineLatest([title.asObservable(), descriptions.asObservable(),postType.asObservable(), extraInfo.asObservable()]).map { (values) -> Bool in
+            return (values[0].length > 4 && values[1].length > 4
+            && values[2].length > 1 && values[3].length > 1)
+            }.distinctUntilChanged().subscribe(onNext: {[unowned self] (enable) in
+                self.submitBtnEnable.value = enable
+            }).disposed(by: disposeBag)
+    }
 }
 
 
@@ -79,5 +96,10 @@ extension CreatePostVC {
             }
             return cell
         }
+        
+        viewModel.nextBtnEnable.asObservable().do(onNext: {[unowned self] enable in
+            self.rightBarItemBtn.alpha = enable ? 1 : 0.5
+        }).bindTo(rightBarItemBtn.rx.isEnabled).disposed(by: disposeBag)
+        
     }
 }
