@@ -33,6 +33,11 @@ class CreatePostFillTipInfoVC: BaseViewController {
         super.init(coder: aDecoder)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        rightBarItemBtn.alpha = rightBarItemBtn.isEnabled ? 1 : 0.5
+    }
+    
 }
 
 extension CreatePostFillTipInfoVC {
@@ -54,6 +59,7 @@ extension CreatePostFillTipInfoVC {
         Observable.just([SectionModel(model:"", items:rows)])
             .bindTo(tableV.rx.items(dataSource: dataSource))
             .disposed(by: disposeBag)
+        
         dataSource.configureCell = { (_, tv: UITableView, ip: IndexPath, item:RowData) in
             let cell = tv.dequeueReusableCell(withIdentifier: item.reuseIdentifier, for: ip)
             if let baseCell =  cell as? BaseTableCell {
@@ -65,8 +71,8 @@ extension CreatePostFillTipInfoVC {
         viewModel.submitBtnEnable.asObservable().do(onNext: {[unowned self] enable in
             self.rightBarItemBtn.alpha = enable ? 1 : 0.5
         }).bindTo(rightBarItemBtn.rx.isEnabled).disposed(by: disposeBag)
-        
-        
+
+
         rightBarItemBtn.rx.tap.subscribe(onNext: {[unowned self] x in
             let viewModel = self.viewModel
             _ = APIProvider.request(.submitPost(title: viewModel.title.value,

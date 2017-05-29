@@ -7,8 +7,19 @@
 //
 
 import UIKit
+import RxDataSources
+import RxSwift
 
 class HomeVC: BaseViewController {
+    let tableV = UITableView().then {this in
+        this.estimatedRowHeight = 400
+        this.rowHeight = UITableViewAutomaticDimension
+        this.separatorStyle = .none
+        this.register(CreatePostTitleCell.self, forCellReuseIdentifier: "CreatePostTitleCell")
+        this.register(CreatePostDescriptionsCell.self, forCellReuseIdentifier: "CreatePostDescriptionsCell")
+    }
+    
+    let dataSource = RxTableViewSectionedReloadDataSource<SectionModel<String, RowData>>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +40,7 @@ extension HomeVC {
          title = "Bulletin"
          _ = creatBarItemRight(title: "Submit")
 
-    }
+    }	
     override func rightBarItemClick() {
         self.present(BaseNavigationController(rootViewController: CreatePostVC()), animated: true, completion: nil)
     }

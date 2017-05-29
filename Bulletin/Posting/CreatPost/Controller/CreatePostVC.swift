@@ -96,7 +96,9 @@ extension CreatePostVC {
             }
             return cell
         }
-        
+        rightBarItemBtn.rx.observe(Float.self, "alpha").subscribe(onNext: { (x) in
+            LogDebug(x)
+        }).disposed(by: disposeBag)
         viewModel.nextBtnEnable.asObservable().do(onNext: {[unowned self] enable in
             self.rightBarItemBtn.alpha = enable ? 1 : 0.5
         }).bindTo(rightBarItemBtn.rx.isEnabled).disposed(by: disposeBag)
